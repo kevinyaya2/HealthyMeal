@@ -45,7 +45,7 @@
             <button class="btn btn-outline-success filter-btn" data-category="高蛋白">高蛋白</button>
             <button class="btn btn-outline-success filter-btn" data-category="低糖">低糖</button>
             <button class="btn btn-outline-success filter-btn" data-category="均衡飲食">均衡飲食</button>
-            
+
         </div>
 
         <!-- 餐點列表 -->
@@ -65,12 +65,17 @@
         <h2 class="text-center">🏆 我的稱號</h2>
         <p id="title-display" class="text-center">載入中...</p>
     </section>
-    
+
     <section id="order-history" class="container my-5">
         <h2 class="text-center">📜 歷史訂單健康分析</h2>
         <ul id="order-list" class="list-group"></ul>
-        <h3 class="text-center mt-3">🧠 智慧健康建議</h3>
-        <p id="health-advice" class="text-center">載入中...</p>
+        <!-- 🔴 新增「清除歷史訂單」按鈕 -->
+        <div class="text-center mt-3">
+            <button class="btn btn-danger" onclick="clearOrderHistory()">清除歷史訂單</button>
+        </div>
+    </section>
+    <h3 class="text-center mt-3">🧠 智慧健康建議</h3>
+    <p id="health-advice" class="text-center">載入中...</p>
     </section>
 
 
