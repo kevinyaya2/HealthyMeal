@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const categories = ['all', '健康餐', '高蛋白', '輕食'];
@@ -61,7 +61,7 @@ export default function Menu({
           <div className="col-md-4" key={item.id}>
             <div className={`card h-100 shadow-sm border-0 hover-effect ${highlightedItemId === item.id ? 'added-highlight' : ''}`}>
               <img
-                src={`/${item.image}`}
+                src={`${import.meta.env.BASE_URL}${item.image}`}
                 alt={item.name}
                 className="card-img-top"
                 style={{ height: '250px', objectFit: 'cover' }}
