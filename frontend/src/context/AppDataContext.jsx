@@ -1,8 +1,17 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+﻿import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { getAuthToken } from './AuthContext';
 
 const AppDataContext = createContext(null);
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+
+function authHeaders(extra = {}) {
+  const token = getAuthToken();
+  return {
+    ...extra,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
 
 function normalizeMenuItem(item) {
   return {
@@ -34,23 +43,31 @@ export function AppDataProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  useEffect(() => {
-    fetch(`${API_BASE}/menu`)
-      .then((res) => res.json())
-      .then((data) => setMenuItems(data))
-      .catch((err) => {
-        console.error('Failed to fetch menu:', err);
-        toast.error('載入菜單失敗，請稍後再試。');
-      });
+  const refreshMenuItems = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/menu`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch menu');
+      }
+      const data = await res.json();
+      setMenuItems(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Failed to fetch menu:', err);
+      toast.error('載入餐點失敗，請稍後再試。');
+    }
+  }, []);
 
-    fetch(`${API_BASE}/orders`)
+  useEffect(() => {
+    refreshMenuItems();
+
+    fetch(`${API_BASE}/orders`, { headers: authHeaders() })
       .then((res) => res.json())
       .then((data) => setOrderHistory(data))
       .catch((err) => {
         console.error('Failed to fetch orders:', err);
-        toast.error('載入訂單紀錄失敗。');
+        toast.error('載入訂單紀錄失敗，請稍後再試。');
       });
-  }, []);
+  }, [refreshMenuItems]);
 
   const addToCart = (item) => {
     setCart((prev) => upsertItem(prev, item));
@@ -59,12 +76,12 @@ export function AppDataProvider({ children }) {
   const addItemsToCart = (items) => {
     const validItems = (items || []).filter(Boolean);
     if (validItems.length === 0) {
-      toast.error('這筆訂單沒有可加入的品項。');
+      toast.error('沒有可加入購物車的品項。');
       return;
     }
 
     setCart((prev) => validItems.reduce((nextCart, item) => upsertItem(nextCart, item), prev));
-    toast.success(`已加入 ${validItems.length} 個品項到購物車`);
+    toast.success(`已加入 ${validItems.length} 項到購物車`);
   };
 
   const removeFromCart = (itemId) => {
@@ -82,17 +99,19 @@ export function AppDataProvider({ children }) {
   const clearCart = () => setCart([]);
 
   const checkout = async () => {
-    const cartItemsForOrder = cart.flatMap((item) => Array.from({ length: item.quantity }, () => normalizeMenuItem(item)));
+    const cartItemsForOrder = cart.flatMap((item) =>
+      Array.from({ length: item.quantity }, () => normalizeMenuItem(item)),
+    );
 
     if (cartItemsForOrder.length === 0) {
-      toast.error('購物車是空的，無法結帳。');
+      toast.error('購物車是空的，請先加入商品。');
       return { ok: false, error: new Error('購物車是空的') };
     }
 
     try {
       const res = await fetch(`${API_BASE}/orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(cartItemsForOrder),
       });
 
@@ -110,16 +129,16 @@ export function AppDataProvider({ children }) {
 
   const getTitle = () => {
     const count = orderHistory.length;
-    if (count >= 20) return '健康王者';
-    if (count >= 10) return '均衡達人';
-    if (count >= 5) return '健康進階者';
-    if (count >= 1) return '健康新手';
-    return '尚未獲得稱號';
+    if (count >= 20) return '健康老饕';
+    if (count >= 10) return '穩定回購客';
+    if (count >= 5) return '飲食新手';
+    if (count >= 1) return '初次嘗鮮';
+    return '尚未下單';
   };
 
   const getHealthAdvice = () => {
     if (orderHistory.length === 0) {
-      return '目前還沒有訂單資料，先選一份餐點開始，AI 才能給你更準確建議。';
+      return '目前還沒有訂單資料，先選幾份餐點，我再提供更精準的建議。';
     }
 
     let lowSugar = 0;
@@ -129,13 +148,13 @@ export function AppDataProvider({ children }) {
     orderHistory.flatMap((order) => order.items || []).forEach((item) => {
       if (item.category === '低糖') lowSugar += 1;
       if (item.category === '高蛋白') protein += 1;
-      if (item.category === '均衡飲食') balancedDiet += 1;
+      if (item.category === '均衡餐') balancedDiet += 1;
     });
 
-    if (lowSugar > 2) return '你的低糖飲食很棒，繼續維持！';
-    if (protein > 2) return '高蛋白攝取不錯，建議增加蔬菜纖維讓營養更均衡。';
-    if (balancedDiet > 2) return '你維持了均衡飲食，這是最健康的選擇！';
-    return '整體選擇很均衡，持續保持這個飲食節奏。';
+    if (lowSugar > 2) return '你偏好低糖選擇，建議維持良好飲食節奏。';
+    if (protein > 2) return '你常選高蛋白餐，記得補充蔬菜與水分。';
+    if (balancedDiet > 2) return '你整體搭配很均衡，繼續保持。';
+    return '建議增加蔬菜與蛋白質比例，讓營養更完整。';
   };
 
   const totalPrice = useMemo(
@@ -156,6 +175,7 @@ export function AppDataProvider({ children }) {
     categoryFilter,
     setSearchQuery,
     setCategoryFilter,
+    refreshMenuItems,
     addToCart,
     addItemsToCart,
     removeFromCart,

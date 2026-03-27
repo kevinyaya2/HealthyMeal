@@ -7,14 +7,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     
-    // 你可以把 allowedOrigins 寫死，或是用設定檔注入
-    @Override
+    // 你可以�? allowedOrigins 寫死，�??�用設�?檔注??    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                // 這邊我們允許所有的來源，這樣你的 GitHub Pages 才能呼叫
-                // 如果要更安全，可以只寫你 GitHub Pages 的網址
+                // ?��??�們�?許�??��?來�?，這樣你�? GitHub Pages ?�能?�叫
+                // 如�?要更安全，可以只寫�? GitHub Pages ?�網?�
                 .allowedOriginPatterns("*") 
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }

@@ -12,10 +12,21 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private Integer totalPrice;
     private LocalDateTime orderDate;
-    
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items;
+
+    @PrePersist
+    public void onCreate() {
+        if (status == null) {
+            status = OrderStatus.PENDING;
+        }
+    }
 }

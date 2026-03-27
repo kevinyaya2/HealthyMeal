@@ -1,7 +1,20 @@
-import { useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
-const categories = ['all', '高蛋白', '低糖', '均衡飲食'];
+const categories = ['all', '高蛋白', '低糖', '均衡餐'];
+
+function resolveImageSrc(image) {
+  const raw = String(image || '').trim();
+  if (!raw) return `${import.meta.env.BASE_URL}image/meal.webp`;
+  if (/^https?:\/\//i.test(raw)) return raw;
+
+  const normalized = raw.replace(/\\/g, '/');
+  const withPrefix = normalized.startsWith('image/') || normalized.startsWith('/image/')
+    ? normalized.replace(/^\//, '')
+    : `image/${normalized.replace(/^\//, '')}`;
+
+  return `${import.meta.env.BASE_URL}${withPrefix}`;
+}
 
 export default function Menu({
   menuItems,
@@ -13,11 +26,13 @@ export default function Menu({
 }) {
   const [highlightedItemId, setHighlightedItemId] = useState(null);
 
-  const filteredMenu = menuItems.filter((item) => {
-    const matchesSearch = item.name?.includes(searchQuery);
-    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredMenu = useMemo(() => {
+    return (menuItems || []).filter((item) => {
+      const matchesSearch = (item.name || '').includes(searchQuery || '');
+      const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [menuItems, searchQuery, categoryFilter]);
 
   const handleAddToCart = (item) => {
     addToCart(item);
@@ -30,14 +45,14 @@ export default function Menu({
 
   return (
     <section id="menu" className="container my-5">
-      <h2 className="text-center fw-bold mb-4">健康餐點列表</h2>
+      <h2 className="text-center fw-bold mb-4">精選餐點</h2>
 
       <div className="row justify-content-center mb-4">
         <div className="col-md-8">
           <input
             type="text"
             className="form-control form-control-lg shadow-sm rounded-pill px-4"
-            placeholder="輸入餐點名稱..."
+            placeholder="搜尋餐點名稱..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -61,10 +76,13 @@ export default function Menu({
           <div className="col-md-4" key={item.id}>
             <div className={`card h-100 shadow-sm border-0 hover-effect ${highlightedItemId === item.id ? 'added-highlight' : ''}`}>
               <img
-                src={`${import.meta.env.BASE_URL}${item.image}`}
+                src={resolveImageSrc(item.image)}
                 alt={item.name}
                 className="card-img-top"
                 style={{ height: '250px', objectFit: 'cover' }}
+                onError={(event) => {
+                  event.currentTarget.src = `${import.meta.env.BASE_URL}image/meal.webp`;
+                }}
               />
               <div className="card-body text-center d-flex flex-column">
                 <h4 className="card-title fw-bold">{item.name}</h4>
@@ -84,7 +102,7 @@ export default function Menu({
         ))}
         {filteredMenu.length === 0 && (
           <div className="col-12 text-center text-muted mt-5">
-            <h5>找不到符合條件的餐點</h5>
+            <h5>目前沒有符合條件的餐點</h5>
           </div>
         )}
       </div>

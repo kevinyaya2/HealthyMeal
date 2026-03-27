@@ -1,4 +1,5 @@
-﻿import Header from '../components/Header';
+﻿import { useEffect } from 'react';
+import Header from '../components/Header';
 import Menu from '../components/Menu';
 import { useAppData } from '../context/AppDataContext';
 
@@ -9,8 +10,13 @@ export default function MealListPage() {
     setSearchQuery,
     categoryFilter,
     setCategoryFilter,
+    refreshMenuItems,
     addToCart,
   } = useAppData();
+
+  useEffect(() => {
+    refreshMenuItems();
+  }, [refreshMenuItems]);
 
   return (
     <>
@@ -26,4 +32,3 @@ export default function MealListPage() {
     </>
   );
 }
-

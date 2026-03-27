@@ -1,4 +1,9 @@
+html, body, #root {
+    min-height: 100%;
+}
+
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
 }
 
@@ -72,26 +77,79 @@ header p {
 }
 
 
-.nav-animated {
-    position: relative;
+.hm-navbar {
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid #e4eee8;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
-.nav-animated::after {
-    content: '';
-    position: absolute;
-    left: 0.5rem;
-    right: 0.5rem;
-    bottom: 0.2rem;
-    height: 2px;
-    background-color: #198754;
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 0.2s ease;
+.hm-navbar-inner {
+    min-height: 62px;
 }
 
-.nav-animated:hover::after,
-.nav-animated.active::after {
-    transform: scaleX(1);
+.hm-navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #145a38;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+.hm-navbar-brand:hover {
+    color: #0f4c2f;
+}
+
+.hm-brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #198754, #48b97a);
+    box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15);
+}
+
+.hm-navbar-toggler {
+    border-color: #d6e8dd;
+}
+
+.hm-navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.18);
+}
+
+.hm-navbar-links {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
+}
+
+.hm-nav-pill {
+    border-radius: 999px;
+    padding: 0.42rem 0.72rem !important;
+    color: #2b5a41;
+    font-weight: 600;
+    line-height: 1;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.hm-nav-pill:hover {
+    color: #145a38;
+    background: #ecf7f0;
+}
+
+.hm-nav-pill.active {
+    color: #145a38 !important;
+    background: #e7f5ed;
+    border-color: #cde6d7;
+}
+
+.hm-nav-pill-cart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .added-highlight {
@@ -266,4 +324,332 @@ header p {
 .plan-selected {
     border: 2px solid #198754 !important;
     box-shadow: 0 12px 26px rgba(25, 135, 84, 0.18) !important;
+}
+
+.hm-user-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 0.45rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.hm-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: 240px;
+    padding: 0.34rem 0.58rem;
+    border-radius: 999px;
+    border: 1px solid #cde6d7;
+    background: #f4fbf7;
+    color: #1f5138;
+}
+
+.hm-user-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #198754;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.hm-user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hm-logout-btn {
+    align-self: center;
+}
+
+.hm-login-btn,
+.hm-logout-btn {
+    border-radius: 999px;
+    padding-inline: 0.7rem;
+}
+
+@media (min-width: 992px) {
+    .hm-user-chip {
+        max-width: 220px;
+    }
+}
+
+@media (max-width: 991px) {
+    .hm-navbar-links {
+        justify-content: center;
+        row-gap: 0.4rem;
+    }
+
+    .hm-nav-pill {
+        padding: 0.35rem 0.58rem !important;
+        font-size: 0.95rem;
+    }
+
+    .hm-user-actions {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .hm-user-chip {
+        max-width: min(72vw, 240px);
+    }
+}
+
+.hm-login-page {
+    --hm-bg-top: #edf8f1;
+    --hm-bg-bottom: #dff3e6;
+    --hm-card-bg: #ffffff;
+    --hm-title: #123524;
+    --hm-field-bg: #f2f8f4;
+    --hm-primary: #198754;
+    --hm-primary-hover: #157347;
+    --hm-line: #b4c7bc;
+    --hm-highlight: #f59e0b;
+
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    color: var(--hm-title);
+    background:
+        radial-gradient(620px 620px at 92% 15%, transparent 0 170px, rgba(255, 255, 255, 0.4) 171px 192px, transparent 193px),
+        radial-gradient(420px 420px at 90% 95%, transparent 0 82px, rgba(255, 255, 255, 0.32) 83px 106px, transparent 107px),
+        radial-gradient(700px 700px at 20% 122%, transparent 0 280px, rgba(25, 135, 84, 0.08) 281px 316px, transparent 317px),
+        linear-gradient(180deg, var(--hm-bg-top) 0%, var(--hm-bg-bottom) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+}
+
+.hm-login-shell {
+    width: min(100%, 920px);
+    display: grid;
+    gap: 1.2rem;
+    justify-items: center;
+}
+
+.hm-login-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: clamp(1.35rem, 1.25rem + 0.6vw, 1.8rem);
+    font-weight: 700;
+}
+
+.hm-login-brand-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    background: transparent;
+    color: var(--hm-primary);
+    overflow: hidden;
+}
+
+.hm-login-brand-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transform: scale(2.8);
+    transform-origin: center;
+}
+
+.hm-login-card {
+    width: min(100%, 760px);
+    border-radius: 26px;
+    background: var(--hm-card-bg);
+    box-shadow: 0 18px 40px rgba(18, 53, 36, 0.12);
+    padding: 2.1rem 2.2rem 1.8rem;
+}
+
+.hm-login-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 1.5rem + 0.4vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.hm-login-field {
+    border: 1px solid #d9e9df;
+    border-radius: 14px;
+    height: 52px;
+    font-size: 1.02rem;
+    padding: 0 1rem;
+    background: var(--hm-field-bg);
+}
+
+.hm-password-field-wrap {
+    position: relative;
+}
+
+.hm-password-input {
+    padding-right: 3rem;
+}
+
+.hm-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #3f5b4d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem;
+    border-radius: 999px;
+}
+
+.hm-password-toggle:hover {
+    color: #1f5138;
+}
+
+.hm-password-toggle:focus-visible {
+    outline: 2px solid rgba(25, 135, 84, 0.35);
+    outline-offset: 2px;
+}
+
+.hm-login-field:focus {
+    border-color: rgba(25, 135, 84, 0.45);
+    box-shadow: 0 0 0 0.22rem rgba(25, 135, 84, 0.16);
+    background: #fff;
+}
+
+.hm-login-helper {
+    text-align: center;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.hm-login-helper a {
+    color: #24563c;
+    text-decoration: none;
+}
+
+.hm-login-helper a:hover {
+    text-decoration: underline;
+}
+
+.hm-login-link {
+    color: #24563c;
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.hm-login-link:hover,
+.hm-login-link:focus {
+    color: #24563c;
+    text-decoration: underline;
+}
+
+.hm-form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2f5f46;
+}
+
+.hm-question-box {
+    background: #f0f8f3;
+    border: 1px solid #d4e9dd;
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    color: #2f5f46;
+    font-weight: 600;
+}
+
+.hm-login-submit {
+    height: 52px;
+    border-radius: 14px;
+    background: var(--hm-primary);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.hm-login-submit:hover,
+.hm-login-submit:focus {
+    background: var(--hm-primary-hover);
+    color: #fff;
+}
+
+.hm-login-submit:disabled {
+    opacity: 0.75;
+}
+
+.hm-login-divider {
+    margin: 1.1rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 600;
+    color: #3f5b4d;
+}
+
+.hm-login-divider::before,
+.hm-login-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--hm-line);
+}
+
+.hm-login-cert-title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.hm-login-demo-btn {
+    display: block;
+    margin: 0 auto 0.7rem;
+    background: #f4fbf7;
+    border: 1px solid #cde6d7;
+    color: #24563c;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 0.5rem 0.9rem;
+}
+
+.hm-login-demo-btn:hover,
+.hm-login-demo-btn:focus {
+    background: #e7f7ee;
+    border-color: #b8dcc7;
+    color: #1c4630;
+}
+
+.hm-login-demo-note {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #3f5b4d;
+}
+
+@media (max-width: 991px) {
+    .hm-login-page {
+        min-height: 100vh;
+        padding: 1.2rem 0.75rem 2rem;
+    }
+
+    .hm-login-card {
+        padding: 1.4rem 1.2rem;
+    }
 }
