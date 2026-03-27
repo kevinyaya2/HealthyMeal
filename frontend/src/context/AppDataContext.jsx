@@ -122,19 +122,19 @@ export function AppDataProvider({ children }) {
       return '目前還沒有訂單資料，先選一份餐點開始，AI 才能給你更準確建議。';
     }
 
-    let healthy = 0;
+    let lowSugar = 0;
     let protein = 0;
-    let light = 0;
+    let balancedDiet = 0;
 
     orderHistory.flatMap((order) => order.items || []).forEach((item) => {
-      if (item.category === '健康餐') healthy += 1;
+      if (item.category === '低糖') lowSugar += 1;
       if (item.category === '高蛋白') protein += 1;
-      if (item.category === '輕食') light += 1;
+      if (item.category === '均衡飲食') balancedDiet += 1;
     });
 
-    if (healthy > 2) return '你最近健康餐比例很高，可以搭配少量高蛋白提升飽足感。';
+    if (lowSugar > 2) return '你的低糖飲食很棒，繼續維持！';
     if (protein > 2) return '高蛋白攝取不錯，建議增加蔬菜纖維讓營養更均衡。';
-    if (light > 2) return '你偏好輕食，若有運動可以加一份蛋白質來源。';
+    if (balancedDiet > 2) return '你維持了均衡飲食，這是最健康的選擇！';
     return '整體選擇很均衡，持續保持這個飲食節奏。';
   };
 

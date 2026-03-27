@@ -37,18 +37,28 @@ function getAdviceMeta(summary) {
       tone: 'protein',
       chipClass: 'bg-primary-subtle text-primary',
       chipText: '蛋白偏高',
-      nextStep: '下次下單可加入一份輕食或蔬菜配菜。',
+      nextStep: '下次下單可加入一份低糖或均衡飲食餐點。',
       recommendation: '建議搭配 1 份纖維來源，讓營養更均衡。',
     };
   }
 
-  if (summary.topCategory === '輕食') {
+  if (summary.topCategory === '低糖') {
     return {
       tone: 'light',
       chipClass: 'bg-warning-subtle text-warning',
-      chipText: '可補蛋白',
-      nextStep: '下次可補一份高蛋白餐點提升飽足感。',
-      recommendation: '建議每 2 餐加入 1 份蛋白質來源。',
+      chipText: '低糖優先',
+      nextStep: '下次可補一份高蛋白或均衡飲食餐點。',
+      recommendation: '建議每 2 餐加入 1 份蛋白質來源，維持飽足與營養。',
+    };
+  }
+
+  if (summary.topCategory === '均衡飲食') {
+    return {
+      tone: 'balanced',
+      chipClass: 'bg-success-subtle text-success',
+      chipText: '本週均衡',
+      nextStep: '維持目前選餐節奏，每週檢查一次比例。',
+      recommendation: '你目前飲食節奏不錯，繼續保持。',
     };
   }
 

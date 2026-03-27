@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const categories = ['all', '健康餐', '高蛋白', '輕食'];
+const categories = ['all', '高蛋白', '低糖', '均衡飲食'];
 
 export default function Menu({
   menuItems,

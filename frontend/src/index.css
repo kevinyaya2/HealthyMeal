@@ -42,7 +42,7 @@ header {
     background-color: #f8f9fa;
 }
 header {
-    background: url(/HealthyMeal/image/meal.webp) center/cover no-repeat;
+    background: url('/image/meal.webp') center/cover no-repeat;
     background-size: cover;  /* 確保圖片適應不同螢幕 */
     background-position: center;
     background-attachment: fixed; /* 讓背景圖片在滾動時保持固定 */
